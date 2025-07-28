@@ -1,0 +1,390 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: linear-gradient(to right, #cc7f7f, #380ce8);
+    background-attachment: fixed;
+    
+}
+/* ================================================================================================ */
+ .section {
+  margin-top: -50px;
+    padding: 60px 20px;
+    text-align: center;
+}
+.section h1{
+  color: #f2f2f2;
+  font-size: 70px;
+}
+
+.section p{
+  color: #f2f2f2;
+  margin-top: -40px;
+  font-size: 30px;
+}
+
+.box {
+    position: relative;
+    width: 1300px;
+    height: 1120px;
+    padding: 20px;
+    margin-bottom: 50px ;
+    background: #f2f2f2;
+    border-radius: 12px;
+    overflow: hidden;
+    animation: fadeInUp 1s;
+    box-shadow: 5px 5px 5px 5px #000;
+}
+
+.box::before,
+.box::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    transform-origin: center;
+    animation: animate 3s linear infinite;
+    z-index: 1;
+}
+
+.box::before {
+    background: conic-gradient(transparent 60%, #000 40%, transparent 90%);
+}
+
+.box::after {
+    background: conic-gradient(transparent 40%, #0008ff 40%, transparent 60%);
+    animation-delay: -2s;
+}
+
+
+
+.outside {
+    position: absolute;
+    inset: 6px;
+    background: hsl(236, 33%, 38%);;
+    padding: 0;
+    border-radius: 10px;
+    z-index: 2;
+    overflow: hidden;
+}
+
+
+
+.Caesar-cipher h1{
+    color: #f2f2f2;
+    text-align: center;
+}
+
+
+
+
+
+.Caesar-cipher textarea{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 65px;
+    border-radius: 10px;
+    padding: 20px;
+    resize: none;
+    outline: none;
+    font-weight: 600; 
+     font-size: larger;
+     box-shadow: 5px 5px 5px 5px #000;
+     transition: all 0.4s ease;
+
+}
+
+
+
+
+/* ========================================================================================== */
+                                         /* key_input */
+/* ========================================================================================== */
+.shift-amount{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.shift-amount h1{
+  margin-top: 45px;
+}
+
+.key{
+  width: 500px;
+  height: 50px;
+  margin-top: 20px;
+  outline: none;
+  border: none;
+  margin-left: 20px;
+  border-radius: 20px;
+  padding: 10px;
+  font-family:   'Fira Sans Extra Condensed', 'Arial Narrow', Arial, sans-serif;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+/* ========================================================================================== */
+                                         /* Type checkbox */
+/* ========================================================================================== */
+
+.activity{
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.activity label button{
+  width: 200px;
+  padding: 20px;
+  border: none;
+  border-radius: 20px;
+  transition: all 0.6s ease;
+  font-weight: bold;
+}
+
+.activity label button:hover{
+  color: white;
+  font-size: 20px;
+  background-color: #000;
+  font-weight: bolder;
+}
+
+.activity button.selected {
+  background-color: #0004fc;
+  color: white;
+  font-size: 20px;
+}
+
+.activity input[type="checkbox"]:checked + button {
+        background-color: #0004fc;
+        color: white;
+        outline: none;
+        font-size: 20px;
+    }
+
+        
+  .check{
+    margin-top: 35px;
+    margin-left: 10px;
+  }
+
+
+/* ========================================================================================== */
+                                     /* Submit button */
+/* ========================================================================================== */
+.done{
+  margin-left: 540px;
+  margin-top: 50px;
+  width: 200px;
+  padding: 20px;
+  border-radius: 20px;
+  border: none;
+  font-weight: bold;
+  transition: all 0.6s ease;
+}
+
+#done{
+  margin-top: 60px;
+  margin-bottom: 60px;
+  
+}
+
+.done:hover{
+  color: white;
+  font-size: 20px;
+  font-weight: bolder;
+  background-color: #000;
+}
+/* ===================================================================================== */
+                                        /* Output Text Area */
+/* ===================================================================================== */
+.output textarea{
+  margin-top: 20px;
+
+}
+textarea:hover,
+textarea:focus{
+  box-shadow: 0px 0px 0px 0px #000;
+}
+.output {
+  position: relative;
+  display: inline-block;
+}
+
+#outputText {
+  width: 100%;
+  box-sizing: border-box;
+}
+/* ===================================================================================== */
+                                        /* Copy button */
+/* ===================================================================================== */
+.copy {
+  position: absolute;
+  margin-top: -226px;
+  margin-left: 1203px;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.copy svg {
+  transition: all 1s ease;
+}
+
+.copy:hover svg {
+  color: #f2f2f2;
+  transform: scaleX(-1); 
+}
+
+.copy:hover {
+  background-color: #000000;
+}
+/* ===================================================================================== */
+                                        /* Home page button */
+/* ===================================================================================== */
+.back_index {
+  background-color: #f2f2f2;
+  width: fit-content;
+  padding: 25px;
+  border-radius: 20px;
+  margin-left: 1030px;
+  margin-bottom: 50px;
+  margin-top: 100px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  cursor: pointer;
+  transition: all 1s ease;
+  animation: fadeInUp 1s;
+}
+
+.back_index i,
+.back_index h1 {
+  font-size: 18px;
+  color: #333;
+  margin: 0;
+  transition: color 0.3s ease;
+}
+
+.back_index:hover {
+  background-color: #000000;
+  transform: translateY(-9px);
+}
+
+.back_index:hover i,
+.back_index:hover h1 {
+  color: #f2f2f2;
+}
+
+
+
+
+/* ===================================================================================== */
+.keyOptions{
+  padding: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 20px;
+  text-align: center;
+  border: none;
+  outline: none;
+}
+
+.key-options input{
+  padding: 20px;
+  border-radius: 20px;
+  margin: 10px;
+}
+
+
+.cipher-checkbox {
+    display: none;
+}
+
+.toggle-btn {
+  width: 200px;
+  text-align: center;
+    display: inline-block;
+    padding: 25px;
+    background-color: #eee;
+    color: #333;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 1s ease;
+    margin-bottom: 5px;
+}
+
+
+
+.toggle-btn:hover {
+  color: #ffffff;
+  background-color: #000;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+.cipher-checkbox:checked + .toggle-btn {
+    background-color:  #0004fc;
+    color: white;
+    border-color:  #0004fc;
+}
+
+
+
+/* ======================================================================== */
+.select-ciphers{
+  margin-top: 50px;
+  width: 800px;
+  height: 400px;
+  gap: 10px;
+  margin-left: 250px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+/* =================================================================================== */
+@keyframes animate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+@keyframes bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(10px);
+    }
+  }
+
+@keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(400px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+
