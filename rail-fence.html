@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/cipher.css">
+    <title>EnigmaBox Rail Fence Cipher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="section">
+        <h1>Welcome to EnigmaBox</h1>
+        <p>Play with the Power of Ciphers</p>
+    </div>
+
+
+
+    <div class="choose" >
+        <div class="box" onclick="">
+            <span class="borderline"></span>
+            <div class="outside">
+                <div class="Caesar-cipher">
+                    <form id="vigenereForm" method="post" action="/railfence">
+                        <h1>Rail Fence Cipher</h1>
+                        <div class="activity">
+                            <label>
+                                <input type="radio" name="action" value="encrypt" hidden checked>
+                                <button type="button" onclick="selectAction(this)">Encryption</button>
+                            </label>
+                            <label>
+                                <input type="radio" name="action" value="decrypt" hidden>
+                                <button type="button" onclick="selectAction(this)">Decryption</button>
+                            </label>
+                        </div>
+                        <textarea placeholder="Enter your text" name="Text" rows="10" cols="95" id="">{{ input }}</textarea>
+                    
+                       
+<!-- =============================================================================================================================================================================================== -->
+                        <div class="number-input">
+                            <button class="arrow-button" onclick="changeValue(-1)"><i class="fas fa-arrow-down"></i></button>
+                            <input type="text" class="numinput" name="rangeInput" id="numberField" value="2" min="2" inputmode="numeric"  pattern="[0-9]*"  placeholder="Enter a Phone Number"  required/>
+                            <button class="arrow-button" onclick="changeValue(1)"><i class="fas fa-arrow-up"></i></button>
+                        </div>
+
+                        <script>
+                        function changeValue(delta) {
+                            const input = document.getElementById('numberField');
+                            let currentValue = parseInt(input.value) || 2;
+                            let newValue = currentValue + delta;
+
+                            if (newValue < 2) {
+                            newValue = 2;
+                            }
+
+                            input.value = newValue;
+                        }
+                        </script>
+<!-- =============================================================================================================================================================================================== -->
+                    
+                        <input class="done" type="submit" value="Submit">
+                    </form>
+
+                    <div class="output">
+                        <textarea id="outputText"  placeholder="Your message is being converted..." rows="10" cols="90" readonly>{{ output }}</textarea>
+                        <button class="copy" onclick="copyToClipboard()"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v16h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 18H8V7h11v16z"/>
+                          </svg>
+                          </button>
+
+                    </div>
+                    
+                    
+                    <script>
+                        function copyToClipboard() {
+                            const outputText = document.getElementById("outputText");
+                            navigator.clipboard.writeText(outputText.value)
+                                .then(() => alert("Copied to clipboard!"))
+                                .catch(err => alert("Failed to copy: " + err));
+                        }
+
+
+                    function selectAction(btn) {
+                        const buttons = document.querySelectorAll('.activity button');
+                        buttons.forEach(b => b.classList.remove('selected'));
+                    
+                        btn.classList.add('selected');
+                    
+                       
+                        btn.previousElementSibling.checked = true;
+                    }
+                    </script>
+                  <script>
+                    document.getElementById("vigenereForm").addEventListener("submit", function(event) {
+                        event.preventDefault(); 
+                    
+                        const formData = new FormData(this);
+                    
+                        fetch("/railfence", {
+                            method: "POST",
+                            body: formData
+                        })
+                        .then(response => response.text())
+                        .then(html => {
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, "text/html");
+                    
+                            const newOutput = doc.querySelector("#outputText")?.value || "";
+                    
+                            document.getElementById("outputText").value = newOutput;
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("Something went wrong.");
+                        });
+                    });
+                    </script>
+                    
+                        
+                    
+              
+            
+            </div>
+        </div>
+        <div><h1 style="color: azure; margin-top: 100px; "><h1>kkmkmkmkmkmkmkm</h1></div>
+    
+       
+        
+    </div>
+    
+    <div class="back_index" onclick="window.open('/index', '_self')">
+        <h1>Go with a different cipher</h1>
+        <i class="fa fa-arrow-right"></i>
+    </div>
+
+    <div class="explain">
+    <h1>🔐 Rail Fence Cipher</h1>
+    <p>
+        <b>What is the Rail Fence Cipher?</b><br>
+        The Rail Fence Cipher is a form of transposition cipher. <br>
+        It encrypts the message by writing it in a zigzag pattern across multiple "rails" (rows),<br>
+        and then reading row by row to get the ciphertext.<br>
+        It doesn't change the letters, just their order.
+    </p>
+
+    <h1><br>🔄 How Does It Work?</h1>
+    <p>
+        Let’s take the message:<br>
+        <b>Plaintext:</b> MEET ME AFTER THE TOGA PARTY<br>
+        <b>Depth:</b> 2 rails
+    </p>
+
+    <p>Write it in a zigzag across 2 rails:</p>
+
+    <div class="ex_table">
+    <table border="1">
+        <tr>
+            <th>Rail 1</th>
+            <td>M</td>
+            <td> </td>
+            <td>E</td>
+            <td></td>
+            <td>M</td>
+            <td> </td>
+            <td>A</td>
+            <td></td>
+            <td>T</td>
+            <td></td>
+            <td>R</td>
+            <td></td>
+            <td>H</td>
+            <td> </td>
+            <td>T</td>
+            <td></td>
+            <td>G</td>
+
+            <td></td>
+            <td>P</td>
+            <td></td>
+            <td>R</td>
+            <td></td>
+            <td>Y</td>
+        </tr>
+        <tr>
+            <th>Rail 2</th>
+            <td></td>
+            <td>E</td>
+            <td> </td>
+            <td>T</td>
+            <td> </td>
+            <td>E</td>
+            <td></td>
+            <td>F</td>
+            <td></td>
+            <td>E</td>
+            <td></td>
+            <td>T</td>
+            <td></td>
+            <td>E</td>
+            <td></td>
+            <td>O</td>
+            <td></td>
+            <td>A</td>
+            <td></td>
+            <td>A</td>
+            <td></td>
+            <td>T</td>
+            <td></td>
+            
+        </tr>
+    </table>
+    </div>
+
+    <p>
+        Now, read row by row:
+    </p>
+    <p>
+        <b>Ciphertext:</b> MEMATRHTGPRY ETEFETEOAAT
+    </p>
+
+    <h1>🧠 Rail Fence Cipher Steps</h1>
+    <ul class="where">
+        <li>Write the message in a zigzag across the number of rails</li>
+        <li>Skip spaces if needed or keep them for readability</li>
+        <li>Read the letters row by row to get the ciphertext</li>
+    </ul>
+
+    <p><b>Note:</b> To decrypt, reverse the process by placing the letters back into the zigzag pattern and reading column by column.</p>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/cipher.css">
+    <title>EnigmaBox Vigenère Cipher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="section">
+        <h1>Welcome to EnigmaBox</h1>
+        <p>Play with the Power of Ciphers</p>
+    </div>
+
+    <div class="choose" >
+        <div class="box" onclick="">
+            <span class="borderline"></span>
+            <div class="outside">
+                <div class="Caesar-cipher">
+                   
+                    <form method="post" action="/Vigenère" id="vigenereForm">
+                        <h1>DES Cipher</h1>
+                    
+                        <div class="activity">
+                            <label>
+                                <input type="radio" name="action" value="encrypt" hidden checked>
+                                <button type="button" onclick="selectAction(this)">Encryption</button>
+                            </label>
+                            <label>
+                                <input type="radio" name="action" value="decrypt" hidden>
+                                <button type="button" onclick="selectAction(this)">Decryption</button>
+                            </label>
+                        </div>
+                    
+                        <textarea placeholder="Enter your text" name="Text" rows="10" cols="90" id="" required>{{ input }}</textarea>
+                    
+                        <div class="shift-amount">
+                            <h1>Key:</h1>
+                            <input type="text" name="key" class="key" required placeholder="Type your key ....">
+                        </div>
+                    
+                        <input class="done" type="submit" value="Submit">
+                    </form>
+
+                    <div class="output">
+                        <textarea id="outputText"  placeholder="Your message is being converted..." rows="10" cols="90" readonly>{{ output }}</textarea>
+                        <button class="copy" onclick="copyToClipboard()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v16h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 18H8V7h11v16z"/>
+                          </svg>
+                          </button>
+
+                    </div>
+                    
+                    
+                    <script>
+                        function copyToClipboard() {
+                            const outputText = document.getElementById("outputText");
+                            navigator.clipboard.writeText(outputText.value)
+                                .then(() => alert("Copied to clipboard!"))
+                                .catch(err => alert("Failed to copy: " + err));
+                        }
+
+
+                    function selectAction(btn) {
+                        const buttons = document.querySelectorAll('.activity button');
+                        buttons.forEach(b => b.classList.remove('selected'));
+                    
+                        btn.classList.add('selected');
+                    
+                      
+                        btn.previousElementSibling.checked = true;
+                    }
+                    </script>
+                    
+                    <script>
+                        document.getElementById("vigenereForm").addEventListener("submit", function(event) {
+                            event.preventDefault();
+                        
+                            const formData = new FormData(this);
+                        
+                            fetch("/Vigenère", {
+                                method: "POST",
+                                body: formData
+                            })
+                            .then(response => response.text())
+                            .then(html => {
+                                const parser = new DOMParser();
+                                const doc = parser.parseFromString(html, "text/html");
+                        
+                                const newOutput = doc.querySelector("#outputText")?.value || "";
+                        
+                                document.getElementById("outputText").value = newOutput;
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                                alert("Something went wrong.");
+                            });
+                        });
+                        </script>
+                        
+                    
+                    
+              
+            
+            </div>
+        </div>
+    
+       
+        
+    </div>
+
+    <div class="back_index" onclick="window.open('/index', '_self')">
+        <h1>Go with a different cipher</h1>
+        <i class="fa fa-arrow-right"></i>
+    </div>
+
+   <div class="explain">
+    <h1>🔐 DES (Simplified Feistel Cipher)</h1> 
+    <p>
+        <b>What is the DES Cipher?</b><br>
+        DES (Data Encryption Standard) is a symmetric key block cipher based on the Feistel structure. <br>
+        It splits data into two halves and processes them through multiple rounds of substitutions and permutations using a key.<br>
+        Here, we use a simplified version to understand how Feistel works.
+    </p>
+
+    <h1><br>🔄 How Does It Work?</h1>
+    <p>
+        The plaintext is divided into two halves: Left and Right.<br>
+        In each round:
+        <ul>
+            <li>The right half is passed through a function (called the Feistel function).</li>
+            <li>The output is XORed with the left half.</li>
+            <li>The result becomes the new right half, and the old right becomes the new left.</li>
+        </ul>
+        After all rounds, the left and right halves are swapped one last time to produce the ciphertext.
+    </p>
+
+    <div class="ex_table"><table border="1">
+        <tr><th colspan="5">Break it down round by round:</th></tr>
+        <tr>
+            <th>Round</th>
+            <th>Left</th>
+            <th>Right</th>
+            <th>Subkey</th>
+            <th>New Right = Left XOR F(Right, Key)</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>plai</td>
+            <td>ntext</td>
+            <td>mysec</td>
+            <td>(plai ⊕ F(ntext, mysec))</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>ntext</td>
+            <td>output1</td>
+            <td>ysecr</td>
+            <td>(ntext ⊕ F(output1, ysecr))</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>output1</td>
+            <td>output2</td>
+            <td>secret</td>
+            <td>...</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>...</td>
+            <td>...</td>
+            <td>ecretk</td>
+            <td>Final Right</td>
+        </tr>
+    </table></div>
+
+    <h1>🧠 DES (Feistel) Round Function</h1>
+    <p>
+        The main idea in each round:
+        <br><br>
+        <strong><b>For encryption:</b></strong>
+        <p>
+L[i+1] = R[i]  
+R[i+1] = L[i] XOR F(R[i], K[i])</p>
+
+        <strong><b>For decryption (reverse rounds):</b></strong>
+        <p>
+R[i] = L[i+1]  
+L[i] = R[i+1] XOR F(L[i+1], K[i])</p>
+
+        <b>Where:</b>
+        <ul class="where">
+            <li><b>L[i]</b> and <b>R[i]</b> are left and right halves in round i</li>
+            <li><b>F</b> is the Feistel function (often just XOR with subkey in simplified DES)</li>
+            <li><b>K[i]</b> is the round key for round i</li>
+        </ul>
+    </p>
+</div>
+
+</body>
+</html>

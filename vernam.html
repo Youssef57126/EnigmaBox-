@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/cipher.css">
+    <title>EnigmaBox Vigenère Cipher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="section">
+        <h1>Welcome to EnigmaBox</h1>
+        <p>Play with the Power of Ciphers</p>
+    </div>
+
+
+
+    <div class="choose" >
+        <div class="box" onclick="">
+            <span class="borderline"></span>
+            <div class="outside">
+                <div class="Caesar-cipher">
+                   
+                    <form method="post" action="/vernamcipher" id="vigenereForm">
+                        <h1>Vernam Cipher</h1>
+                    
+                        <div class="activity">
+                            <label>
+                                <input type="radio" name="action" value="encrypt" hidden checked>
+                                <button type="button" onclick="selectAction(this)">Encryption</button>
+                            </label>
+                            <label>
+                                <input type="radio" name="action" value="decrypt" hidden>
+                                <button type="button" onclick="selectAction(this)">Decryption</button>
+                            </label>
+                        </div>
+                    
+                        <textarea placeholder="Enter your text" name="Text" rows="10" cols="95" id="">{{ input }}</textarea>
+                    
+                        <div class="shift-amount">
+                            <h1>Key:</h1>
+                            <input type="text" name="key" class="key" required placeholder="Type your key ....">
+                            <div class="activity check">
+                                <label>
+                                    <input type="checkbox" name="generate_key" id="generateKeyCheckbox" value="yes" hidden>
+                                    <button type="button" id="randomKeyBtn">Random Key</button>
+                                </label>
+                            </div>
+                        </div>
+                    
+                        <input class="done" type="submit" value="Submit">
+                    </form>
+
+                    <div class="output">
+                        <textarea id="outputText"  placeholder="Your message is being converted..." rows="10" cols="90" readonly>{{ output }}</textarea>
+                        <button class="copy" onclick="copyToClipboard()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v16h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 18H8V7h11v16z"/>
+                          </svg>
+                          </button>
+
+                    </div>
+                    
+
+                    
+                   
+                    <script>
+                        const keyInput = document.querySelector('.key');
+                        const checkbox = document.querySelector('#generateKeyCheckbox');
+                        const button = document.querySelector('#randomKeyBtn');
+
+                        keyInput.addEventListener('input', () => {
+                            checkbox.disabled = keyInput.value.trim() !== "";
+                        });
+
+                        button.addEventListener('click', () => {
+                            checkbox.checked = !checkbox.checked;
+
+                            if (checkbox.checked) {
+                                keyInput.value = "";
+                                keyInput.disabled = true;
+                                checkbox.disabled = false;
+                            } else {
+                                keyInput.disabled = false;
+                            }
+                        });
+                    </script>
+                                        
+                    <script>
+                        function copyToClipboard() {
+                            const outputText = document.getElementById("outputText");
+                            navigator.clipboard.writeText(outputText.value)
+                                .then(() => alert("Copied to clipboard!"))
+                                .catch(err => alert("Failed to copy: " + err));
+                        }
+
+
+                    function selectAction(btn) {
+                        const buttons = document.querySelectorAll('.activity button');
+                        buttons.forEach(b => b.classList.remove('selected'));
+                    
+                        btn.classList.add('selected');
+                    
+                        btn.previousElementSibling.checked = true;
+                    }
+                    </script>
+                    
+                    <script>
+                        document.getElementById("vigenereForm").addEventListener("submit", function(event) {
+                            event.preventDefault(); 
+                        
+                            const formData = new FormData(this);
+                        
+                            fetch("/vernamcipher", {
+                                method: "POST",
+                                body: formData
+                            })
+                            .then(response => response.text())
+                            .then(html => {
+                                const parser = new DOMParser();
+                                const doc = parser.parseFromString(html, "text/html");
+                        
+                                const newOutput = doc.querySelector("#outputText")?.value || "";
+                        
+                                document.getElementById("outputText").value = newOutput;
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                                alert("Something went wrong.");
+                            });
+                        });
+                        </script>
+                        
+                    
+                    
+              
+            
+            </div>
+        </div>
+    
+       
+        
+    </div>
+
+    <div class="back_index" onclick="window.open('/index', '_self')">
+        <h1>Go with a different cipher</h1>
+        <i class="fa fa-arrow-right"></i>
+    </div>
+<div class="explain">
+    <h1>🔐 Vernam Cipher (Binary)</h1> 
+    <p>
+        <b>What is the Vernam Cipher?</b><br>
+        The Vernam Cipher is a symmetric encryption technique that uses the XOR (⊕) operation <br>
+        between the binary representation of each character in the plaintext and a key of the same length.<br>
+        When used with a truly random key (used only once), which is unbreakable.
+    </p>
+
+    <h1><br>🔄 How Does It Work?</h1>
+    <p>
+        Convert both the plaintext and the key to binary.<br>
+        Then apply XOR (bitwise exclusive OR) between each pair of bits.<br>
+        The result is the ciphertext in binary. Decryption is done the same way.
+    </p>
+
+    <div class="ex_table"><table border="1">
+        <tr>
+            <th colspan="6">Example (text to binary, then XOR):</th>
+        </tr>
+        <tr>
+            <th>Plaintext</th>
+            <td>H</td>
+            <td>I</td>
+            <td>!</td>
+        </tr>
+        <tr>
+            <th>Binary (P)</th>
+            <td>01001000</td>
+            <td>01001001</td>
+            <td>00100001</td>
+        </tr>
+        <tr>
+            <th>Key</th>
+            <td>A</td>
+            <td>B</td>
+            <td>C</td>
+        </tr>
+        <tr>
+            <th>Binary (K)</th>
+            <td>01000001</td>
+            <td>01000010</td>
+            <td>01000011</td>
+        </tr>
+        <tr>
+            <th>XOR (P ⊕ K)</th>
+            <td>00001001</td>
+            <td>00001011</td>
+            <td>01100010</td>
+        </tr>
+        <tr>
+            <th>Cipher (binary)</th>
+            <td>00001001</td>
+            <td>00001011</td>
+            <td>01100010</td>
+        </tr>
+    </table></div>
+
+    <h1>🧠 Vernam Cipher Formula (Binary)</h1>
+    <p>
+        <p><b>Encryption:</b> &nbsp;&nbsp;&nbsp;C = P ⊕ K</p>
+        <p><b>Decryption:</b> &nbsp;&nbsp;&nbsp;P = C ⊕ K</p>
+        <b>Where:</b>
+        <ul class="where">
+            <li><b>P</b> is the binary of the plaintext character</li>
+            <li><b>K</b> is the binary of the key character</li>
+            <li><b>C</b> is the binary of the ciphertext character</li>
+            <li>⊕ means XOR: 1 if bits are different, 0 if they are the same</li>
+        </ul>
+    </p>
+</div>
+
+
+</body>
+</html>

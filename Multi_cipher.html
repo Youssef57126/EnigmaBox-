@@ -1,0 +1,272 @@
+<!DOCTYPE >
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/multi.css">
+    <title>EnigmaBox Vigenère Cipher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    
+
+    <div class="section">
+        <h1>Welcome to EnigmaBox</h1>
+        <p>Play with the Power of Ciphers</p>
+    </div>
+
+
+
+    <div class="choose" >
+        <div class="box" onclick="">
+            <span class="borderline"></span>
+            <div class="outside">
+                <div class="Caesar-cipher">
+                   
+                  
+                    <form method="post" action="/multi" id="vigenereForm">
+    
+
+        <h1>Multi-Layer Cipher</h1>
+        <textarea placeholder="Enter your text" name="Text" rows="10" cols="130">{{ input }}</textarea>
+    <div class="select-ciphers">
+        
+        <div class="cipher-block">
+            <input type="checkbox" class="cipher-checkbox" data-target="keyOptions1" name="generate_key_1" value="Ceaser" id="check1">
+            <label for="check1" class="toggle-btn">Ceaser Cipher</label>
+            <div id="keyOptions1" class="key-options" style="display: none;">
+                <input type="number" name="cipher_shift" placeholder="Enter Shift Amount" min="1">
+            </div>
+        </div>
+
+       
+        <div class="cipher-block">
+            <input type="checkbox" class="cipher-checkbox" data-target="keyOptions2" name="generate_key_2" value="Vigenère" id="check2">
+            <label for="check2" class="toggle-btn">Vigenère Cipher</label>
+            <div id="keyOptions2" class="key-options" style="display: none;">
+                <input type="text" name="vigenère_key" placeholder="Enter a Key" min="1">
+            </div>
+        </div>
+
+        
+        <div class="cipher-block">
+            <input type="checkbox" class="cipher-checkbox" data-target="keyOptions3" name="generate_key_3" value="Playfair" id="check3">
+            <label for="check3" class="toggle-btn">Playfair Cipher</label>
+            <div id="keyOptions3" class="key-options" style="display: none;">
+                <input type="text" name="playfair_key" placeholder="Enter a Key" min="1">
+            </div>
+        </div>
+
+
+        <div class="cipher-block">
+            <input type="checkbox" class="cipher-checkbox" data-target="keyOptions7" name="generate_key_7" value="rail_fence" id="check7">
+            <label for="check7" class="toggle-btn">Rail Fence Cipher</label>
+            <div id="keyOptions7" class="key-options" style="display: none;">
+                <input type="number" name="rails" placeholder="Enter rails numbers" min="1">
+            </div>
+        </div>
+        
+
+        <div class="cipher-block">
+            <input type="checkbox" class="cipher-checkbox" data-target="keyOptions8" name="generate_key_8" value="row_transposition" id="check8">
+            <label for="check8" class="toggle-btn">Row Transposition Cipher</label>
+            <div id="keyOptions8" class="key-options" style="display: none;">
+                <input type="text" name="row_key" placeholder="Enter Your Key" min="1">
+            </div>
+        </div>
+
+        <div class="cipher-block">
+            <input type="checkbox" class="cipher-checkbox" data-target="keyOptions9" name="generate_key_9" value="Autokey" id="check9">
+            <label for="check9" class="toggle-btn">Autokey Cipher</label>
+            <div id="keyOptions9" class="key-options" style="display: none;">
+                <input type="text" name="key_autokey" placeholder="Enter A Key" min="1">
+            </div>
+        </div>
+
+         
+
+        <div class="cipher-block">
+            <input type="checkbox" class="cipher-checkbox" data-target="keyOptions4" name="generate_key_4" value="Monoalphabetic" id="check4">
+            <label for="check4" class="toggle-btn">Monoalphabetic Cipher</label>
+        </div>
+
+        <div class="cipher-block">
+            <input type="checkbox" class="cipher-checkbox" data-target="keyOptions5" name="generate_key_5" value="Vernam" id="check5">
+            <label for="check5" class="toggle-btn">Vernam Cipher</label>
+        </div>
+
+        
+
+        <div class="cipher-block">
+            <input type="checkbox" class="cipher-checkbox" data-target="keyOptions6" name="generate_key_6" value="one-pad" id="check6">
+            <label for="check6" class="toggle-btn">One-Time Pad Cipher</label>
+            
+        </div>
+
+    </div>
+
+    <button class="done" type="submit">Submit</button>
+
+</form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    <div class="output">
+                        <textarea id="outputText"  placeholder="Your message is being converted..." rows="10" cols="120" readonly>{{ output }}</textarea>
+                        <button class="copy" onclick="copyToClipboard()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v16h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 18H8V7h11v16z"/>
+                          </svg>
+                          </button>
+
+                    </div>
+
+
+
+                <script>
+                    const form = document.getElementById('vigenereForm');
+
+                    document.querySelectorAll('.cipher-checkbox').forEach(checkbox => {
+                        checkbox.addEventListener('change', () => {
+                            const targetId = checkbox.getAttribute('data-target');
+                            const keyOptionsDiv = document.getElementById(targetId);
+                            if (keyOptionsDiv) {
+                                keyOptionsDiv.style.display = checkbox.checked ? 'block' : 'none';
+                            }
+                        });
+                    });
+
+                    form.addEventListener('submit', function (event) {
+                        event.preventDefault();
+
+                        const data = {
+                            Text: form.querySelector('textarea[name="Text"]').value
+                        };
+
+                        document.querySelectorAll('.cipher-checkbox').forEach(checkbox => {
+                            if (checkbox.checked) {
+                                const targetId = checkbox.getAttribute('data-target');
+                                const keyOptionsDiv = document.getElementById(targetId);
+                                const input = keyOptionsDiv.querySelector('input');
+                                if (input) {
+                                    data[input.name] = input.value;
+                                }
+                                data[checkbox.name] = checkbox.value;
+                            }
+                        });
+
+                        fetch('/multi', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(data)
+                        })
+                        .then(res => res.json())
+                        .then(response => {
+                            const outputBox = document.getElementById('outputText');
+                            if (outputBox) {
+                                outputBox.value = response.output || 'No output received.';
+                            }
+                        })
+                        .catch(err => {
+                            const outputBox = document.getElementById('outputText');
+                            if (outputBox) {
+                                outputBox.value = "Error occurred: " + err;
+                            }
+                        });
+                    });
+                </script>
+
+
+
+
+
+
+
+
+                    <!-- ========================================================= -->
+                    
+                    
+                    <script>
+                        function copyToClipboard() {
+                            const outputText = document.getElementById("outputText");
+                            navigator.clipboard.writeText(outputText.value)
+                                .then(() => alert("Copied to clipboard!"))
+                                .catch(err => alert("Failed to copy: " + err));
+                        }
+
+
+                    function selectAction(btn) {
+                        
+                        const buttons = document.querySelectorAll('.activity button');
+                        buttons.forEach(b => b.classList.remove('selected'));
+                    
+                        btn.classList.add('selected');
+                    
+                        btn.previousElementSibling.checked = true;
+                    }
+                    </script>
+                    
+                    <script>
+                        document.getElementById("vigenereForm").addEventListener("submit", function(event) {
+                            event.preventDefault(); 
+                        
+                            const formData = new FormData(this);
+                        
+                            fetch("/multi", {
+                                method: "POST",
+                                body: formData
+                            })
+                            .then(response => response.text())
+                            .then(html => {
+                                
+                                const parser = new DOMParser();
+                                const doc = parser.parseFromString(html, "text/html");
+                        
+                                
+                                const newOutput = doc.querySelector("#outputText")?.value || "";
+                        
+                                
+                                document.getElementById("outputText").value = newOutput;
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                                alert("Something went wrong.");
+                            });
+                        });
+                        </script>
+                        
+                    
+                    
+              
+            
+            </div>
+        </div>
+    
+       
+        
+    </div>
+
+    <div class="back_index" onclick="window.open('/index', '_self')">
+        <h1>Go with a different cipher</h1>
+        <i class="fa fa-arrow-right"></i>
+    </div>
+</body>
+</html>

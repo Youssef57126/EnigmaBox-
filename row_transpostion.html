@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/row.css">
+    <title>EnigmaBox Playfair Cipher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    
+       
+      
+    <div class="section">
+        <h1>Welcome to EnigmaBox</h1>
+        <p>Play with the Power of Ciphers</p>
+    </div>
+
+    <div class="container">
+
+
+
+    <div class="choose" >
+        <div class="box" onclick="">
+            <span class="borderline"></span>
+            <div class="outside">
+                <div class="Caesar-cipher">
+                   
+                    <form method="post" action="/row_transpostion" id="playfairForm">
+
+                        <h1>Row Transposition Cipher</h1>
+                    
+                        <div class="activity">
+                            <label>
+                                <input type="radio" name="action" value="encrypt" hidden checked>
+                                <button type="button" onclick="selectAction(this)">Encryption</button>
+                            </label>
+                            <label>
+                                <input type="radio" name="action" value="decrypt" hidden>
+                                <button type="button" onclick="selectAction(this)">Decryption</button>
+                            </label>
+                        </div>
+                    
+                        <textarea placeholder="Enter your text" name="Text" rows="10" cols="95" id="">{{ input }}</textarea>
+                    
+                        <div class="shift-amount">
+                            <h1>Key:</h1>
+                            <input type="text" name="key" class="key" required placeholder="Type your key ....">
+                            {{key}}
+                        </div>
+                    
+                        <input class="done" type="submit" value="Submit">
+                    </form>
+
+                    <div class="out-table">
+                        <div class="output">
+                            <textarea id="outputText"  placeholder="Your message is being converted..." rows="10" cols="45" readonly>{{ output }}</textarea>
+                            <button class="copy" onclick="copyToClipboard()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v16h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 18H8V7h11v16z"/>
+                            </svg>
+                            </button>
+
+                            
+                        </div>
+                 <div class="table-action">
+                    <table border="1">
+                        {% if matrix %}
+                            {% for row in matrix %}
+                            <tr>
+                                {% for letter in row %}
+                                <th>{{ letter }}</th>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            {% set alphabet = ['A','B','C','D','E','F','G','H','I','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'] %}
+                            {% for i in range(0, alphabet|length, 5) %}
+                            <tr>
+                                {% for j in range(5) %}
+                                <th>{{ alphabet[i + j] }}</th>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        {% endif %}
+                    </table>
+                </div>
+
+                        
+                </div>
+                    
+                    
+                    <script>
+                        function copyToClipboard() {
+                            const outputText = document.getElementById("outputText");
+                            navigator.clipboard.writeText(outputText.value)
+                                .then(() => alert("Copied to clipboard!"))
+                                .catch(err => alert("Failed to copy: " + err));
+                        }
+
+
+                    function selectAction(btn) {
+                        const buttons = document.querySelectorAll('.activity button');
+                        buttons.forEach(b => b.classList.remove('selected'));
+                    
+                        btn.classList.add('selected');
+
+                        btn.previousElementSibling.checked = true;
+                    }
+                    </script>
+                    
+                   <script>
+                        document.getElementById("playfairForm").addEventListener("submit", function(event) {
+                            event.preventDefault();
+
+                            const formData = new FormData(this);
+
+                            fetch("/row_transpostion", {
+                                method: "POST",
+                                body: formData
+                            })
+                            .then(response => response.text())
+                            .then(html => {
+                                
+                                const parser = new DOMParser();
+                                const doc = parser.parseFromString(html, "text/html");
+
+                                const newOutput = doc.querySelector("#outputText")?.value || "";
+                                document.getElementById("outputText").value = newOutput;
+
+                                const newTable = doc.querySelector(".table-action table");
+                                const currentTable = document.querySelector(".table-action table");
+                                if (newTable && currentTable) {
+                                    currentTable.innerHTML = newTable.innerHTML;
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                                alert("Something went wrong.");
+                            });
+                        });
+                    </script>
+
+                        
+                    
+                    
+              
+            
+            </div>
+        </div>
+    
+       
+        
+    </div>
+
+    <div class="back_index" onclick="window.open('/index', '_self')">
+        <h1>Go with a different cipher</h1>
+        <i class="fa fa-arrow-right"></i>
+    </div>
+
+    <div class="explain">
+    <h1>🔐 Row Transposition Cipher</h1>
+    <p>
+        <b>What is the Row Transposition Cipher?</b><br>
+        The Row Transposition Cipher is a type of columnar transposition.<br>
+        The message is written into rows under a set of numbered columns (key),<br>
+        then the columns are rearranged and read in the order defined by the key.
+    </p>
+
+    <h1><br>🔄 How Does It Work?</h1>
+    <p>
+        Let’s take this message:<br>
+        <b>Plaintext:</b> attack postponed until two am<br>
+        <b>Key:</b> 4312567
+    </p>
+
+    <p>First, remove spaces (optional):</p>
+    <p><b>Message:</b> attackpostponeduntiltwoam</p>
+    <p>Then, fill it into rows under 7 columns:</p>
+    
+    <div class="ex_table">
+    <table border="1">
+        <tr>
+            <th>4</th><th>3</th><th>1</th><th>2</th><th>5</th><th>6</th><th>7</th>
+        </tr>
+        <tr>
+            <td>a</td><td>t</td><td>t</td><td>a</td><td>c</td><td>k</td><td>p</td>
+        </tr>
+        <tr>
+            <td>o</td><td>s</td><td>t</td><td>p</td><td>o</td><td>n</td><td>e</td>
+        </tr>
+        <tr>
+            <td>d</td><td>u</td><td>n</td><td>t</td><td>i</td><td>l</td><td>t</td>
+        </tr>
+        <tr>
+            <td>w</td><td>o</td><td>a</td><td>m</td><td>x</td><td>x</td><td>x</td>
+        </tr>
+    </table>
+    </div>
+
+    <p><i>(Note: We padded with 'x' to fill the last row)</i></p>
+
+    <p>
+        Now, read columns in the order defined by the key:<br>
+        Key = 4312567 → Order = 1st, 2nd, 3rd, ..., based on sorting key positions.
+    </p>
+
+
+    <p>
+        <b>Ciphertext:</b><br>
+        <code>ttnaaptm tsudaw coxknlx petx</code><br>
+        
+    </p>
+
+    <h1>🧠 Row Transposition Cipher Steps</h1>
+    <ul class="where">
+        <li>Write the message in rows under the key digits</li>
+        <li>Pad the last row if needed</li>
+        <li>Read columns based on ascending order of key digits</li>
+        <li style="grid-column: span 3;">Concatenate the result for the final ciphertext</li>
+    </ul>
+
+    <p><b>To decrypt:</b> Reverse the process by writing the letters into columns in the correct order, then reading row by row.</p>
+</div>
+
+</body>
+</html>

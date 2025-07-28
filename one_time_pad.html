@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/cipher.css">
+    <title>EnigmaBox Ceaser Cipher</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+
+    <div class="section">
+        <h1>Welcome to EnigmaBox</h1>
+        <p>Play with the Power of Ciphers</p>
+    </div>
+
+
+
+    <div class="choose" >
+        <div class="box" onclick="">
+            <span class="borderline"></span>
+            <div class="outside">
+                <div class="Caesar-cipher">
+                   
+                    <form id="vigenereForm" method="post" action="/onepad">
+                        <h1>One-Time Pad Cipher</h1>
+                    
+                        <div class="activity">
+                            <label>
+                                <input type="radio" name="action" value="encrypt" hidden checked>
+                                <button type="button" onclick="selectAction(this)">Encryption</button>
+                            </label>
+                            <label>
+                                <input type="radio" name="action" value="decrypt" hidden>
+                                <button type="button" onclick="selectAction(this)">Decryption</button>
+                            </label>
+                        </div>
+                    
+                        <textarea placeholder="Enter your text" name="Text" rows="10" cols="95" id="">{{ input }}</textarea>
+                    
+                        
+                    
+                        <input class="done" style="margin-top: 40px; margin-bottom: 50px;" type="submit" value="Submit">
+                    </form>
+
+                    <div class="output">
+                        <textarea id="outputText"  placeholder="Your message is being converted..." rows="10" cols="90" readonly>{{ output }}</textarea>
+                        <button class="copy" onclick="copyToClipboard()"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v16h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 18H8V7h11v16z"/>
+                          </svg>
+                          </button>
+
+                    </div>
+                    
+                    
+                    <script>
+                        function copyToClipboard() {
+                            const outputText = document.getElementById("outputText");
+                            navigator.clipboard.writeText(outputText.value)
+                                .then(() => alert("Copied to clipboard!"))
+                                .catch(err => alert("Failed to copy: " + err));
+                        }
+
+
+                    function selectAction(btn) {
+                        
+                        const buttons = document.querySelectorAll('.activity button');
+                        buttons.forEach(b => b.classList.remove('selected'));
+                    
+                        btn.classList.add('selected');
+                    
+                        btn.previousElementSibling.checked = true;
+                    }
+                    </script>
+                  <script>
+                    document.getElementById("vigenereForm").addEventListener("submit", function(event) {
+                        event.preventDefault();
+                    
+                        const formData = new FormData(this);
+                    
+                        fetch("/onepad", {
+                            method: "POST",
+                            body: formData
+                        })
+                        .then(response => response.text())
+                        .then(html => {
+                            
+                            const parser = new DOMParser();
+                            const doc = parser.parseFromString(html, "text/html");
+                    
+                            const newOutput = doc.querySelector("#outputText")?.value || "";
+                    
+                            document.getElementById("outputText").value = newOutput;
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("Something went wrong.");
+                        });
+                    });
+                    </script>
+                    
+                        
+                    
+              
+            
+            </div>
+        </div>
+        <div><h1 style="color: azure; margin-top: 100px; "><h1>kkmkmkmkmkmkmkm</h1></div>
+    
+       
+        
+    </div>
+    
+    <div class="back_index" onclick="window.open('/index', '_self')">
+        <h1>Go with a different cipher</h1>
+        <i class="fa fa-arrow-right"></i>
+    </div>
+
+    <div class="explain">
+    <h1>🔐 One-Time Pad (OTP)</h1> 
+    <p>
+        <b>What is the One-Time Pad?</b><br>
+        The One-Time Pad is a method of encryption similar to the Vigenère Cipher,<br>
+        but it uses a unique, random key that is as long as the message and used only once.<br>
+        This makes it theoretically <b>unbreakable</b> if the key is truly random and kept secret.
+    </p>
+
+    <div class="alpha_table"><table border="1">
+        <tr>
+            <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th>
+            <th>K</th><th>L</th><th>M</th><th>N</th><th>O</th><th>P</th><th>Q</th><th>R</th><th>S</th><th>T</th>
+            <th>U</th><th>V</th><th>W</th><th>X</th><th>Y</th><th>Z</th>
+        </tr>  
+        <tr>
+            <td>0</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td>
+            <td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td>
+            <td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td>
+        </tr>
+    </table></div>
+
+    <h1><br>🔄 How Does It Work?</h1>
+    <p>
+        Just like the Vigenère Cipher, the plaintext is encrypted by shifting letters,<br>
+        but the key is random and unique for every letter (no repetition).<br>
+        Each letter in the plaintext is shifted by the corresponding letter in the key.
+    </p>
+
+    <div class="ex_table"><table border="1">
+        <tr>
+            <th colspan="6">Example:</th>
+        </tr>
+        <tr>
+            <th>Plaintext</th>
+            <td>H</td>
+            <td>E</td>
+            <td>L</td>
+            <td>L</td>
+            <td>O</td>
+        </tr>  
+        <tr>
+            <th>Unique Key</th>
+            <td>Q</td>
+            <td>Z</td>
+            <td>M</td>
+            <td>B</td>
+            <td>T</td>
+        </tr> 
+        <tr>
+            <th>Shift</th>
+            <td>16</td>
+            <td>25</td>
+            <td>12</td>
+            <td>1</td>
+            <td>19</td>
+        </tr> 
+        <tr>
+            <th>Cipher</th>
+            <td>X</td>
+            <td>D</td>
+            <td>X</td>
+            <td>M</td>
+            <td>H</td>
+        </tr> 
+    </table></div>
+
+    <h1>🧠 One-Time Pad Formula</h1>
+    <p>
+        <p><b>For encryption:</b> &nbsp;&nbsp;&nbsp;Ci = (Pi + Ki) mod 26</p>
+        <p><b>For decryption:</b> &nbsp;&nbsp;&nbsp;Pi = (Ci - Ki + 26) mod 26</p>
+        <b>Where:</b>
+        <ul class="where-otp">
+            <li><b>Pi</b> is the position of the plaintext letter</li>
+            <li><b>Ki</b> is the position of the key letter (random, non-repeating)</li>
+            <li><b>Ci</b> is the position of the ciphertext letter</li>
+        </ul>
+        <p><b>Important:</b></p>
+        <ul  class="where-otp">
+            <li>The key must be completely random</li>
+            <li>The key must be as long as the plaintext</li>
+            <li>The key must never be reused</li>
+            <li>The key must be kept secret</li>
+        </ul>
+    </p>
+</div>
+
+</body>
+</html>
