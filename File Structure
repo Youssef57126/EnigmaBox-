@@ -1,0 +1,30 @@
+project’s file structure: 
+
+EnigmaBox/
+├── instance/
+│   └── users.db
+├── static/
+│   ├── cipher.css
+│   ├── down.png
+│   ├── index.css
+│   ├── mono.css
+│   ├── multi.css
+│   ├── playfair.css
+│   ├── row.css
+│   └── style.css
+├── templates/
+│   ├── autokey.html
+│   ├── ceaser.html
+│   ├── Des.html
+│   ├── index.html
+│   ├── kk.html
+│   ├── login.html
+│   ├── monoalphabetic.html
+│   ├── Multi_cipher.html
+│   ├── one_time_pad.html
+│   ├── playfair.html
+│   ├── rail-fence.html
+│   ├── row_transposition.html
+│   ├── vernam.html
+│   └── Vigenère.html
+│─── main.py
